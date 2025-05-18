@@ -33,4 +33,4 @@ Perfect for students, developers transitioning to cryptography, or anyone who wa
 
 ---
 
-*"In cryptography, you can't truly understand what you can't implement yourself."*p
+*"In cryptography, you can't truly understand what you can't implement yourself."*
