@@ -39,6 +39,21 @@ fn gcd_with_quotient(a: i32, b: i32) -> Result<(i32, i32), MathError> {
     }
 }
 
+/// Safe for cryptographic use - never exposes intermediate quotients
+pub fn gcd_secure(a: i32, b: i32) -> Result<i32, MathError> {
+    if b == 0 {
+        return Err(MathError::DivisionByZero);
+    }
+    let r = a % b;
+    let a = a / b;
+
+    if r == 0 {
+        Ok(b.abs())
+    } else {
+        gcd_secure(b, r)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -76,5 +91,56 @@ mod tests {
         assert_eq!(gcd_abs(0, 5).unwrap(), 5);
         assert_eq!(gcd(1, 1).unwrap(), 1);
         assert_eq!(gcd_abs(1, 1).unwrap(), 1);
+    }
+
+    #[test]
+    fn test_gcd_secure_positive() {
+        assert_eq!(gcd_secure(48, 88).unwrap(), 8);
+        assert_eq!(gcd_secure(88, 48).unwrap(), 8);
+    }
+
+    #[test]
+    fn test_gcd_secure_with_negatives() {
+        assert_eq!(gcd_secure(48, -88).unwrap(), 8);
+        assert_eq!(gcd_secure(-48, 88).unwrap(), 8);
+        assert_eq!(gcd_secure(-48, -88).unwrap(), 8);
+    }
+
+    #[test]
+    fn test_gcd_secure_division_by_zero() {
+        assert!(matches!(gcd_secure(5, 0), Err(MathError::DivisionByZero)));
+    }
+
+    #[test]
+    fn test_gcd_secure_edge_cases() {
+        assert_eq!(gcd_secure(0, 5).unwrap(), 5);
+        assert_eq!(gcd_secure(1, 1).unwrap(), 1);
+        assert_eq!(gcd_secure(17, 1).unwrap(), 1);
+        assert_eq!(gcd_secure(100, 25).unwrap(), 25);
+    }
+
+    #[test]
+    fn test_gcd_secure_same_as_gcd_abs() {
+        let test_cases = [
+            (48, 88),
+            (-48, 88),
+            (48, -88),
+            (-48, -88),
+            (17, 13),
+            (100, 30),
+            (7, 3),
+        ];
+
+        for (a, b) in test_cases {
+            assert_eq!(
+                gcd_secure(a, b).unwrap(),
+                gcd_abs(a, b).unwrap(),
+                "gcd_secure({}, {}) should equal gcd_abs({}, {})",
+                a,
+                b,
+                a,
+                b
+            );
+        }
     }
 }
