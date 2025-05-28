@@ -7,7 +7,7 @@ use crate::errors::MathError;
 /// - `gcd(48, -88) = 8`  
 /// - `gcd(-48, 88) = -8`
 /// - `gcd(-48, -88) = -8`
-pub fn gcd(a: i32, b: i32) -> Result<i32, MathError> {
+pub fn gcd(a: i64, b: i64) -> Result<i64, MathError> {
     if b == 0 {
         return Err(MathError::DivisionByZero);
     }
@@ -19,7 +19,7 @@ pub fn gcd(a: i32, b: i32) -> Result<i32, MathError> {
 /// - `gcd_abs(48, -88) = 8`
 /// - `gcd_abs(-48, 88) = 8`
 /// - `gcd_abs(-48, -88) = 8`
-pub fn gcd_abs(a: i32, b: i32) -> Result<i32, MathError> {
+pub fn gcd_abs(a: i64, b: i64) -> Result<i64, MathError> {
     if b == 0 {
         return Err(MathError::DivisionByZero);
     }
@@ -28,7 +28,7 @@ pub fn gcd_abs(a: i32, b: i32) -> Result<i32, MathError> {
 
 /// Computes GCD using the Euclidean algorithm recursively.
 /// Returns (gcd, last_quotient) where gcd has the same sign as the first parameter.
-fn gcd_with_quotient(a: i32, b: i32) -> Result<(i32, i32), MathError> {
+fn gcd_with_quotient(a: i64, b: i64) -> Result<(i64, i64), MathError> {
     let r = a % b;
     let q = a / b; // it's the same than "q = (a - r) / b"
 
@@ -40,7 +40,7 @@ fn gcd_with_quotient(a: i32, b: i32) -> Result<(i32, i32), MathError> {
 }
 
 /// Safe for cryptographic use - never exposes intermediate quotients
-pub fn gcd_secure(a: i32, b: i32) -> Result<i32, MathError> {
+pub fn gcd_secure(a: i64, b: i64) -> Result<i64, MathError> {
     if b == 0 {
         return Err(MathError::DivisionByZero);
     }

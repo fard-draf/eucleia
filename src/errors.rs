@@ -4,4 +4,13 @@ use thiserror::Error;
 pub enum MathError {
     #[error("Division by zero")]
     DivisionByZero,
+
+    #[error("Positif integer required")]
+    PositifIntegerRequired,
+
+    #[error("Overflow")]
+    Overflow,
+
+    #[error("Out of range")]
+    OutOfRange,
 }
